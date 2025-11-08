@@ -1,38 +1,203 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Node.js Login</title>
+    <title>DARKSTAR</title>
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; background-color: #f4f4f4; }
-        .login-container { background: while; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); }
-        h2 { text-align: center; color: #333; }
-        input[type="text"], input[type="password"] { width: 100%; padding: 10px; margin: 8px 0 20px 0; display: inline-block; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        button { background-color: #5cb85c; color: white; padding: 14px 20px; margin: 8px 0; border: none; border-radius: 4px; cursor: pointer; width: 100%; }
-        button:hover { background-color: #4cae4c; }
-        #message { text-align: center; margin-top: 15px; font-weight: bold; }
+        /* Define color palette */
+        :root {
+            --darkstar-bg: #0A0A1F;
+            --darkstar-card: #1C1C30;
+            --darkstar-accent: #00F0FF; /* Neon Cyan */
+            --text-color: #FFFFFF;
+        }
+
+        /* Base Styles and Layout (Replaces Tailwind layout classes) */
+        html, body {
+            height: 100%;
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            background-color: var(--darkstar-bg);
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem; /* p-4 */
+        }
+
+        /* Login Card Container (Replaces max-w-md, bg-darkstar-card, p-8/p-10, rounded-xl) */
+        .login-container {
+            width: 100%;
+            max-width: 448px; /* max-w-md */
+            background-color: var(--darkstar-card);
+            padding: 2rem; /* p-8 */
+            border-radius: 0.75rem; /* rounded-xl */
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            /* Custom glow border */
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.4), 0 0 20px rgba(0, 240, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .login-container:hover {
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.8), 0 0 30px rgba(0, 240, 255, 0.2);
+        }
+
+        /* Responsive padding for larger screens (Replaces md:p-10) */
+        @media (min-width: 768px) {
+            .login-container {
+                padding: 2.5rem; /* p-10 */
+            }
+        }
+
+        /* Header Styles (Replaces text-3xl, font-extrabold, text-center, mb-6, tracking-wider, text-darkstar-accent) */
+        .header-title {
+            font-size: 1.875rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 1.5rem;
+            letter-spacing: 0.05em;
+            color: var(--darkstar-accent);
+        }
+
+        /* Subtitle Styles */
+        .header-subtitle {
+            text-align: center;
+            color: #9CA3AF; /* gray-400 */
+            margin-bottom: 2rem; /* mb-8 */
+            font-size: 0.875rem; /* text-sm */
+        }
+
+        /* Form Group/Label Styles */
+        .form-group {
+            margin-bottom: 1rem; /* mb-4 */
+        }
+        .form-group:last-of-type {
+            margin-bottom: 1.5rem; /* mb-6 */
+        }
+        .form-label {
+            display: block;
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 500;
+            margin-bottom: 0.5rem; /* mb-2 */
+            color: #D1D5DB; /* gray-300 */
+        }
+
+        /* Input Styles (Replaces w-full, px-4, py-3, rounded-lg, bg-gray-900, border, text-white) */
+        .form-input {
+            width: 100%;
+            padding: 0.75rem 1rem; /* py-3 px-4 */
+            border-radius: 0.5rem; /* rounded-lg */
+            background-color: #111827; /* gray-900 */
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            color: var(--text-color);
+            transition: all 0.2s ease;
+        }
+
+        /* Input Focus Glow */
+        .form-input:focus {
+            outline: none;
+            border-color: var(--darkstar-accent);
+            box-shadow: 0 0 5px var(--darkstar-accent);
+        }
+
+        /* Button Styles (Replaces w-full, py-3, rounded-lg, bg-darkstar-accent, text-darkstar-bg, font-bold, text-lg) */
+        .submit-button {
+            width: 100%;
+            padding: 0.75rem; /* py-3 */
+            border-radius: 0.5rem; /* rounded-lg */
+            background-color: var(--darkstar-accent);
+            color: var(--darkstar-bg);
+            font-weight: 700; /* font-bold */
+            font-size: 1.125rem; /* text-lg */
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 10px 15px -3px rgba(0, 240, 255, 0.5), 0 4px 6px -2px rgba(0, 240, 255, 0.05); /* shadow-lg shadow-darkstar-accent/50 */
+        }
+
+        .submit-button:hover {
+            background-color: rgba(0, 240, 255, 0.9); /* hover:bg-opacity-90 */
+            box-shadow: 0 15px 20px -5px rgba(0, 240, 255, 0.7), 0 6px 8px -3px rgba(0, 240, 255, 0.1); /* hover:shadow-darkstar-accent/70 */
+        }
+
+        /* Message Area Styles */
+        .message-area {
+            text-align: center;
+            margin-top: 1.5rem; /* mt-6 */
+            font-size: 0.875rem; /* text-sm */
+            color: #F87171; /* text-red-400 */
+        }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <h2>DARKSTAR LOGIN</h2>
-        <form id="loginForm" action="/login" method="POST">
-            <label for="username"><b>Username</b></label>
-            <input type="text" placeholder="username" name="username" required>
 
-            <label for="password"><b>Password</b></label>
-            <input type="password" placeholder="password" name="password" required>
-                
-            <button type="submit">Submit</button>
+    <!-- Login Card Container -->
+    <div class="login-container">
+        
+        <!-- Header -->
+        <h2 class="header-title">
+            DARKSTAR
+        </h2>
+        <p class="header-subtitle">
+            Access Terminal Console
+        </p>
+
+        <!-- Login Form -->
+        <form id="loginForm" action="/login" method="POST">
+            
+            <div class="form-group">
+                <label for="username" class="form-label">
+                    Username (Agent ID)
+                </label>
+                <input 
+                    type="text" 
+                    id="username" 
+                    name="username" 
+                    placeholder="Enter your Agent ID" 
+                    required
+                    class="form-input"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="password" class="form-label">
+                    Password (Secure Key)
+                </label>
+                <input 
+                    type="password" 
+                    id="password" 
+                    name="password" 
+                    placeholder="Enter your Secure Key" 
+                    required
+                    class="form-input"
+                >
+            </div>
+
+            <button 
+                type="submit" 
+                class="submit-button"
+            >
+                INITIATE LOGIN SEQUENCE
+            </button>
         </form>
-        <div id="message"></div>
+
+        <!-- Message Area -->
+        <div id="message" class="message-area">
+            <!-- Authentication messages will appear here -->
+        </div>
+        
     </div>
+
     <script>
-        // Optional: Use JavaScript to handle the form submission dynamically (more modern)
-        // For simplicity, we are relying on the basic HTML form submit here.
-        // A real-world application would use fetch() or XMLHttpRequest.
+        // JavaScript for handling form submission (maintained from previous version)
+        document.getElementById('loginForm').addEventListener('submit', function(event) {
+            // Note: For a real Node.js application, you would handle the form submission
+            // on the server side (as defined by action="/login" method="POST").
+            
+            // Optional: Prevent default submission if using AJAX/Fetch API
+            // event.preventDefault(); 
+        });
     </script>
 </body>
 </html>
