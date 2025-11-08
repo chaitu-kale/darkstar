@@ -66,5 +66,5 @@ app.post('/add', (req, res) => {
 
 // Start the server
 app.listen(port, host, () => {
-  console.log(`Web server running at http://localhost:${port}/`);
+  console.log(`Web server running at http://localhost:${port}/login.html`);
 });
